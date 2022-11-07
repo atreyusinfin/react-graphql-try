@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+const {Form} = require('./Components/login')
+const {List} = require('./Components/list')
+const {useState} = require('react')
+const App = () => {
+    const [session, setSession] = useState({})
+    const [view, setView] = useState('list')
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const loginResult = (_in) => {
+        setSession(_in)
+    }
+
+    const changeView = (newView) => {
+        setView(newView)
+    }
+
+    return (
+        <div>
+            {!session.email 
+                ? <Form 
+                    loginResult={loginResult}
+                    />
+                : ''
+            }
+            {session.email && view === 'list'
+                ? <List
+                    session={session}
+                    setSession={setSession}
+                    changeView={changeView}
+                    />
+                : ''
+            }
+        </div>
+    )
 }
 
-export default App;
+export {App}

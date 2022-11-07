@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+# GitHub GrapQL exercise
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is an exercise (**!!!NON SUITABLE FOR PRODUCTION!!!**) with :
+- ReactJS (using only Local Storage)
+- GitHub OAuth ([App Devices flow](https://docs.github.com/es/developers/apps/building-oauth-apps/authorizing-oauth-apps#device-flow))
+- GitHub GraphQL ([querying viewer repositories](https://developer.gITHUB.com/v4/object/user/))
 
-## Available Scripts
+## Configuring
 
-In the project directory, you can run:
+Prerequisites:
+- A GitHub confirmed account
+- Node JS > 16
 
-### `npm start`
+In order to get this SPA working, is required fulfill these steps:
+1. Register the App as mentioned in [here](https://docs.github.com/es/developers/apps/managing-oauth-apps/modifying-an-oauth-app) (IMPORTANT: make sure you **Enable Device Flow**)
+2. Take the Client ID from your App created in step 1 and paste it on `src/config.js`
+3. Install the dependencies running `npm install`
+4. Run the project in development mode (currently the only way because this is just an excercise) `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Work flow
 
-### `npm test`
+1. Login proccess: Just a initial screen, you can create multilple users. Credentials are stored in local without protection (Again! this app is **NON SUITABLE FOR PRODUCTION**).
+2. Once you log in: The App is going to ask for permissions in your GitHub Account using the OAuth process, once the app get your permission, automatically it will fetch your repos list availables (yours and shared wit you).
+3. The application stores the autorization token when you grant permissions to it following the the flow described here, and reuse it the next time you login, but if it receives an authorization error on fetching repos, automatically it is going to ask permissions again.
+4. Listed, the repos presents two icons the firsone is show if it is a public or a private repo and the second lets you mark as favorite (favorites are move to the top of the list over non favorites).
+5. Logout is done reloading the page.
+ 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```mermaid
+flowchart TD;
+AAAA([start]) --> B[Sign up]
+B --> Q1{There is<br />a token?}
+Q1 --> |Yes| C[Fetch repositories]
+Q1 --> |No| D[Ask permissions]
+C --> Q2{Wath was<br/>the result?}
+Q2 -->|Success| E[list repositories]
+Q2 -->|Access denied| D
+D --> Q3{Does user<br/>accept?}
+Q3 -->|Yes| F[Create code]
+F --> G[Ask confirmation]
+G --> Q4{Confirmed?}
+Q4 -->|No| G
+Q4 -->|Yes| C
+Q3 -->|No| H[Do nothing]
+H --> ZZZZ([End])
+E --> ZZZZ
+```
