@@ -8,7 +8,7 @@ This is an exercise (**!!!NON SUITABLE FOR PRODUCTION!!!**) with :
 ## Configuring
 
 Prerequisites:
-- A GitHub confirmed account
+- A GitHub [email confirmed account](https://docs.github.com/en/get-started/signing-up-for-github/verifying-your-email-address)
 - Node JS > 16
 
 In order to get this SPA working, is required fulfill these steps:
